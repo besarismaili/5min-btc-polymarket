@@ -6,11 +6,21 @@ description: Run and monitor BTC 5-minute Up/Down trading on Polymarket using mo
 # BTC 5m Live
 
 ## Paths
-- Main trading repo: `<your-workspace>/pm-hl-conservative-plus-repo` (or set `BTC5M_REPO`)
-- Core runner: `src/live/pm_live_trade_runner.py`
-- Canonical skill runner: `scripts/test_btc_5m_session_exit_sl.py`
-- Skill control entrypoint: `scripts/btc5m_ctl.sh`
-- Compatibility wrapper (deprecated): `scripts/run_btc_5m_threshold_test.py`
+- **Canonical self-contained bot (repo root)** — use this for new work:
+  - `bot.py` — main trading engine (per-window cycle, order execution, resolution, state).
+  - `strategy.py` — 7-indicator signal engine (`analyze`) + `estimate_token_price`.
+  - `backtest.py` — historical Binance candle fetcher.
+  - `compare_runs.py` — 27-config backtest sweep, Excel report.
+  - `setup_creds.py` — one-time Polymarket CLOB API credential derivation.
+  - `auto_claim.py` — Playwright auto-claim safety net for resolved positions.
+  - Quickstart: `pip install -r requirements.txt`, `python setup_creds.py --write-env`,
+    then `python bot.py --dry-run --mode safe`. See `README.md` for full docs.
+- **Legacy OpenClaw skill wrapper (kept for backward compatibility only):**
+  - Main trading repo: `<your-workspace>/pm-hl-conservative-plus-repo` (or set `BTC5M_REPO`)
+  - Core runner: `src/live/pm_live_trade_runner.py`
+  - Canonical skill runner: `scripts/test_btc_5m_session_exit_sl.py`
+  - Skill control entrypoint: `scripts/btc5m_ctl.sh`
+  - Compatibility wrapper (deprecated): `scripts/run_btc_5m_threshold_test.py`
 
 ## Strategy Alignment
 Use this skill when the operator wants to execute a BTC 5m momentum strategy:
